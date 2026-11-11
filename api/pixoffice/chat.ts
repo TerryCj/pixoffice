@@ -27,6 +27,9 @@
  * IP, not conversationId, because the frontend shares one conversationId
  * ("main") across visitors.
  */
+
+// 2026-11-12 redeploy trigger: force a fresh Production build so the
+// newly set CHAT_PASSPHRASE env var is picked up (no logic change).
 import type { IncomingMessage, ServerResponse } from 'node:http'
 
 export const runtime = 'nodejs'
