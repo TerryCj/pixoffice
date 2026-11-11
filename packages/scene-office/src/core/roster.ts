@@ -3,44 +3,51 @@ export type AgentRosterEntry = {
   name: string
   color: number
   task: string
+  room: string
 }
 
-/** 6 位市场部员工（名册序号 1–6） */
+/** 6 位 AI 团队成员（名册序号 1–6） */
 export const OFFICE_ROSTER: AgentRosterEntry[] = [
   {
     id: 'office-lead',
-    name: '王明',
+    name: 'Muse',
     color: 0xe85d4a,
-    task: '主管：等待交付物',
+    task: '总管：正在改办公室',
+    room: '枢堂',
   },
   {
     id: 'code-agent',
-    name: '李研',
+    name: 'Claude',
     color: 0x4a90d9,
-    task: '检索：扫描信息源',
+    task: '分析：待命',
+    room: '衡斋',
   },
   {
     id: 'file-agent',
-    name: '周理',
+    name: 'ChatGPT',
     color: 0x9b6dd7,
-    task: '整理：归类情报',
+    task: '情报：待命',
+    room: '闻阁',
   },
   {
     id: 'app-agent',
-    name: '陈书',
+    name: 'Gemini',
     color: 0xf5c542,
-    task: '撰写：起草标书',
+    task: '分析：待命',
+    room: '参斋',
   },
   {
     id: 'review-agent',
-    name: '刘市',
+    name: 'Grok',
     color: 0xf97316,
-    task: '市场：打包情报简报',
+    task: '情报：待命',
+    room: '望阁',
   },
   {
     id: 'data-agent',
-    name: '赵审',
+    name: 'Codex',
     color: 0x4ecdc4,
-    task: '审核：合规待审队列',
+    task: '开发：待命',
+    room: '算斋',
   },
 ]

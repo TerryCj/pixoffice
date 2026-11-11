@@ -63,10 +63,10 @@ const meetingParams = z.strictObject({ boardId: idSchema, text: z.string().max(5
 export const officeMeetings: ScenePlugin = {
   id: 'office.meetings', name: '多人会议', version: '1.0.0', apiVersion: 1, dependencies: ['office.objects'],
   capabilities: [{ id: 'office.meeting', name: '白板会议', params: meetingParams,
-    participants: { min: 2, max: 4, roles: [{ role: 'speaker', min: 1, max: 1 }, { role: 'attendee', min: 1, max: 3 }], rules: ['参与者必须绑定座位；boardId 必须指向白板'] },
+    participants: { min: 2, max: 6, roles: [{ role: 'speaker', min: 1, max: 1 }, { role: 'attendee', min: 1, max: 5 }], rules: ['参与者必须绑定座位；boardId 必须指向白板'] },
     build(context, raw) {
       const params = meetingParams.parse(raw), list = actors(context)
-      if (list.length < 2 || list.length > 4 || context.participants.filter(p => p.role === 'speaker').length !== 1 || context.participants.some(p => p.role !== 'speaker' && p.role !== 'attendee')) throw new SceneFault('INVALID_PARTICIPANTS', '会议需 2–4 人、一位 speaker，其余为 attendee')
+      if (list.length < 2 || list.length > 6 || context.participants.filter(p => p.role === 'speaker').length !== 1 || context.participants.some(p => p.role !== 'speaker' && p.role !== 'attendee')) throw new SceneFault('INVALID_PARTICIPANTS', '会议需 2–6 人、一位 speaker，其余为 attendee')
       const board = context.world.props.find(p => p.id === params.boardId && ['office.whiteboard', 'office.wall-whiteboard'].includes(p.templateId))
       if (!board) throw new SceneFault('ENTITY_NOT_FOUND', params.boardId)
       const speaker = one(context, 'speaker')

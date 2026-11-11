@@ -21,7 +21,7 @@ export const referenceOfficeObjects: ScenePlugin = {
       optionalAnchors: ['seatStand', 'seatEntry', 'seatLeft', 'seatRight', 'visitor', 'visitorRight', 'visitorFront', 'conversationLeft', 'conversationRight'], resources: { seat: 1, visitor: 1 } },
     { id: 'office.wall-whiteboard', name: '后墙协作白板', view: 'wall-whiteboard', footprint: { left: 0, top: 0, right: 12, bottom: 1 }, initialState: { title: '', tasks: [] },
       interactions: { write: { name: '查看白板', anchor: 'attendee1', approaches: ['attendee1'], cells: [], posture: 'standing', facing: 'back', resource: 'meeting' } },
-      anchors: { attendee1: { x: 5, y: 1 }, attendee2: { x: 6, y: 1 }, attendee3: { x: 5, y: 2 }, attendee4: { x: 6, y: 2 } }, resources: { meeting: 1 } },
+      anchors: { attendee1: { x: 5, y: 1 }, attendee2: { x: 6, y: 1 }, attendee3: { x: 5, y: 2 }, attendee4: { x: 6, y: 2 }, attendee5: { x: 7, y: 1 }, attendee6: { x: 8, y: 1 } }, resources: { meeting: 1 } },
     { id: 'office.conference-table', name: '会议桌椅', view: 'conference-table', footprint: { left: 0, top: 0, right: 8, bottom: 3 }, anchors: {}, resources: {} },
   ],
   stateSchemas: { 'office.wall-whiteboard': z.strictObject({ title: z.string().max(80).default(''),

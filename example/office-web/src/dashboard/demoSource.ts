@@ -6,12 +6,12 @@ import { notifySubscribers } from '../notifications.ts'
 import { demoAgentInsights } from './demoInsights.ts'
 
 const initialEmployees: DashboardSnapshot['employees'] = [
-  { id: 'office-lead', sceneActorId: 'office-lead', name: '王明', role: '负责人', online: true },
-  { id: 'code-agent', sceneActorId: 'code-agent', name: '李研', role: '信息检索', online: true },
-  { id: 'file-agent', sceneActorId: 'file-agent', name: '周理', role: '资料整理', online: true },
-  { id: 'app-agent', sceneActorId: 'app-agent', name: '陈书', role: '文案撰写', online: true },
-  { id: 'review-agent', sceneActorId: 'review-agent', name: '刘市', role: '市场分析', online: true },
-  { id: 'data-agent', sceneActorId: 'data-agent', name: '赵审', role: '内容审核', online: true },
+  { id: 'office-lead', sceneActorId: 'office-lead', name: 'Muse', role: '总管 · 枢堂', online: true },
+  { id: 'code-agent', sceneActorId: 'code-agent', name: 'Claude', role: '首席分析师 · 衡斋', online: true },
+  { id: 'file-agent', sceneActorId: 'file-agent', name: 'ChatGPT', role: '情报官 · 闻阁', online: true },
+  { id: 'app-agent', sceneActorId: 'app-agent', name: 'Gemini', role: '副分析师 · 参斋', online: true },
+  { id: 'review-agent', sceneActorId: 'review-agent', name: 'Grok', role: '实时情报员 · 望阁', online: true },
+  { id: 'data-agent', sceneActorId: 'data-agent', name: 'Codex', role: '程序员 · 算斋', online: true },
 ]
 
 export type ExampleOfficeSeed = {
@@ -40,19 +40,17 @@ export class ExampleOfficeDataSource implements OfficeDataSource {
     this.insightAt = now; this.insightDomain = seed.insightDomain
     const at = now.toISOString()
     this.snapshot = parseDashboardSnapshot({
-      schemaVersion: '1.0', workspace: { id: 'office-1', name: '我的空间' },
+      schemaVersion: '1.0', workspace: { id: 'office-1', name: 'AI 团队办公室' },
       employees: initialEmployees,
       tasks: [
-        { id: 'market-research', title: '市场调研', assigneeId: 'code-agent', status: 'running', progress: 72, updatedAt: at, summary: '梳理近期市场与竞品信息。' },
-        { id: 'copywriting', title: '文案撰写', assigneeId: 'app-agent', status: 'running', progress: 60, updatedAt: at, summary: '整理调研结果并起草文案。' },
-        { id: 'compliance', title: '合规审核', assigneeId: 'data-agent', status: 'blocked', progress: 30, updatedAt: at, summary: '等待补充来源材料。' },
-        { id: 'report', title: '打包汇报', assigneeId: 'review-agent', status: 'queued', progress: 0, updatedAt: at, summary: '等待上游任务完成。' },
-        { id: 'archive', title: '资料归档', assigneeId: 'file-agent', status: 'completed', progress: 100, updatedAt: at },
+        { id: 'premarket-brief', title: '盘前简报', assigneeId: 'office-lead', status: 'queued', progress: 0, updatedAt: at, summary: '每日 22:00 推送，暂无进行中内容。' },
+        { id: 'panic-report', title: '恐慌度日报', assigneeId: 'code-agent', status: 'queued', progress: 0, updatedAt: at, summary: 'A 股/美股恐慌度日报，暂无进行中内容。' },
+        { id: 'earnings-analysis', title: '财报分析', assigneeId: 'code-agent', status: 'queued', progress: 0, updatedAt: at, summary: 'NVDA Q3 财报 11/17，提醒 11/16 08:30。' },
+        { id: 'launch-watch', title: '发射监控', assigneeId: 'review-agent', status: 'queued', progress: 0, updatedAt: at, summary: 'Flight 15 窗口 11/14 06:45–08:00（北京），暂无新进展。' },
       ],
       events: [
-        { id: 'example-1', kind: 'note', employeeId: 'code-agent', taskId: 'market-research', summary: '开始梳理市场资料', occurredAt: at },
-        { id: 'example-2', kind: 'note', employeeId: 'app-agent', taskId: 'copywriting', summary: '正在起草文案', occurredAt: at },
-        { id: 'example-3', kind: 'note', employeeId: 'data-agent', taskId: 'compliance', summary: '等待补充来源材料', occurredAt: at },
+        { id: 'example-1', kind: 'note', employeeId: 'office-lead', taskId: 'premarket-brief', summary: '办公室改版进行中', occurredAt: at },
+        { id: 'example-2', kind: 'note', employeeId: 'review-agent', taskId: 'launch-watch', summary: 'Flight 15 发射窗口待 FAA 最终许可', occurredAt: at },
       ],
     })
     if (seed.workspace) this.snapshot.workspace = { ...seed.workspace }
@@ -66,7 +64,7 @@ export class ExampleOfficeDataSource implements OfficeDataSource {
       }))
     }
     this.snapshot = parseDashboardSnapshot(this.snapshot)
-    this.snapshot.employees = this.snapshot.employees.map((employee, index) => ({ ...employee, insights: employee.insights ?? demoAgentInsights(index, now, 'main', this.insightDomain) }))
+    // 不自动附加演示洞察：洞察须用真实业务历史，缺失时页面显示“暂无历史统计”。
     this.snapshot.conversationId = 'main'
     this.snapshot.whiteboard = seed.whiteboard ?? dashboardWhiteboardTaskBoard(this.snapshot)
     this.conversations.set('main', this.snapshot)

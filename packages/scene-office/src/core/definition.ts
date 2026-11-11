@@ -2,10 +2,10 @@ import type { Actor, World } from '@pixoffice/runtime/model'
 import { OFFICE_ROSTER } from './roster.ts'
 import { OFFICE_WALKABLE_AREA } from './officeFloor.ts'
 
-const people = OFFICE_ROSTER.map(({ id, name, color }) => [id, name, color] as const)
+const people = OFFICE_ROSTER.map(({ id, name, color, room }) => [id, name, color, room] as const)
 
 export function createOfficeWorld(sceneId = 'office-1'): World {
-  const props = people.map((_, i) => ({ id: `desk-${i}`, name: `${people[i][1]}的工位`, templateId: 'office.workstation', position: { x: 6 + i % 2 * 5, y: 4 + Math.floor(i / 2) * 3 }, state: {}, stateRevision: 0 }))
+  const props = people.map((_, i) => ({ id: `desk-${i}`, name: people[i][3], templateId: 'office.workstation', position: { x: 6 + i % 2 * 5, y: 4 + Math.floor(i / 2) * 3 }, state: {}, stateRevision: 0 }))
   const actors: Actor[] = people.map(([id, name, color], i) => ({ id, name, templateId: id, color, homeId: props[i].id,
     position: { x: props[i].position.x, y: props[i].position.y + 1 }, facing: 'back', posture: 'seated', using: { propId: props[i].id, interactionId: 'seat' },
     presentation: { status: 'idle', title: '等待指令', sourceRevision: 0 } }))

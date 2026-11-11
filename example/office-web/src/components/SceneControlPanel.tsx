@@ -43,8 +43,8 @@ export function SceneControlPanel({ runtime, snapshot, panel }: { runtime: Scene
       <label>交接内容<textarea value={text} maxLength={500} onChange={event => setText(event.target.value)} rows={3} /></label>
       <button className="runtime-primary" disabled={!host || snapshot.editing} onClick={() => attempt(() => check(runtime.submit(visitCommand(runtime, world.actors.indexOf(actor) + 1, [world.actors.indexOf(host!) + 1], () => text))))}><MessageSquare size={15} />拜访工位<ArrowRight size={15} /></button>
       <div className="runtime-button-row"><button disabled={snapshot.editing} onClick={() => check(runtime.submit({ ...commandBase(runtime), type: 'activity.start', capability: 'office.focus', participants: [{ entityId: actor.id, role: 'worker' }], params: { title: text.slice(0, 100) || '专注工作' } }))}>开始专注</button><button onClick={() => check(runtime.submit(presentationCommand(runtime, actor.id, 'thinking', text.slice(0, 200))))}>更新状态</button></div>
-      <h3>会议成员 <span>{meetingIds.length}/4</span></h3>
-      <div className="runtime-attendees">{world.actors.map(item => <label key={item.id}><input type="checkbox" checked={meetingIds.includes(item.id)} disabled={!meetingIds.includes(item.id) && meetingIds.length >= 4} onChange={event => setMeetingIds(ids => event.target.checked ? [...ids, item.id] : ids.filter(id => id !== item.id))} />{item.name}</label>)}</div>
+      <h3>会议成员 <span>{meetingIds.length}/6</span></h3>
+      <div className="runtime-attendees">{world.actors.map(item => <label key={item.id}><input type="checkbox" checked={meetingIds.includes(item.id)} disabled={!meetingIds.includes(item.id) && meetingIds.length >= 6} onChange={event => setMeetingIds(ids => event.target.checked ? [...ids, item.id] : ids.filter(id => id !== item.id))} />{item.name}</label>)}</div>
       <div className="runtime-button-row"><button disabled={meetingIds.length < 2 || snapshot.editing} onClick={() => attempt(() => {
         const board = world.props.find(prop => ['office.whiteboard', 'office.wall-whiteboard'].includes(prop.templateId))
         if (!board) throw new Error('地图中没有白板')

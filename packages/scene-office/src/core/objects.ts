@@ -12,7 +12,7 @@ export const officeObjects: ScenePlugin = {
     { id: 'office.whiteboard', name: '会议白板', view: 'whiteboard',
       footprint: { left: 0, right: 2, top: 0, bottom: 1 }, initialState: { title: '', text: '' },
       interactions: { write: { name: '查看白板', anchor: 'attendee1', approaches: ['attendee1'], cells: [], posture: 'standing', facing: 'back', resource: 'meeting' } },
-      anchors: { attendee1: { x: 0, y: 1 }, attendee2: { x: 1, y: 1 }, attendee3: { x: 0, y: 2 }, attendee4: { x: 1, y: 2 } }, resources: { meeting: 1 } },
+      anchors: { attendee1: { x: 0, y: 1 }, attendee2: { x: 1, y: 1 }, attendee3: { x: 0, y: 2 }, attendee4: { x: 1, y: 2 }, attendee5: { x: 2, y: 2 }, attendee6: { x: 3, y: 2 } }, resources: { meeting: 1 } },
   ],
   stateSchemas: { 'office.whiteboard': z.strictObject({ title: z.string().max(60), text: z.string().max(500) }) },
 }
