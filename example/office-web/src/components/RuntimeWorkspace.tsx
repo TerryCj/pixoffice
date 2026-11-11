@@ -34,7 +34,11 @@ import type { OfficeTeamSession } from '../application/OfficeTeamSession.ts'
 function download(value: unknown, filename: string) {
   const url = URL.createObjectURL(new Blob([stringifyDocumentObject(value, 2)], { type: 'application/json' }))
   const link = document.createElement('a')
-  link.href = url; link.download = filename; link.click(); URL.revokeObjectURL(url)
+  link.href = url; link.download = filename
+  // Revoking the object URL synchronously cancels the download in several
+  // browsers (the click is async); defer it like the whiteboard/map download.
+  document.body.appendChild(link); link.click(); link.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
 export function RuntimeWorkspace({ runtime, simulation, whiteboardProgress, connection, dashboard, dashboardError, sceneLinkError, dataMode, canExecuteActions = true, executeAction, createEmployee, memberCreation, pendingTaskIds, actionError, chatSession, decisionSession, uiSession, decisionOpenToken = 0, teamSelection, layout = 'full', pageLayout, shell: suppliedShell, presentation, workspaceTools: WorkspaceTools, previewSessions, layoutStorageKey }: {

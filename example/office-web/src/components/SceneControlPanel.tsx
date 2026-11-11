@@ -11,7 +11,11 @@ export type ScenePanel = 'controls' | 'plugins' | 'protocol'
 function download(value: unknown, filename: string) {
   const url = URL.createObjectURL(new Blob([stringifyDocumentObject(value, 2)], { type: 'application/json' }))
   const a = document.createElement('a')
-  a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url)
+  a.href = url; a.download = filename
+  // Revoking the object URL synchronously cancels the download in several
+  // browsers (the click is async); defer it like the whiteboard/map download.
+  document.body.appendChild(a); a.click(); a.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
 export function SceneControlPanel({ runtime, snapshot, panel }: { runtime: SceneRuntime; snapshot: Snapshot; panel: ScenePanel }) {
