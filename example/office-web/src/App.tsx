@@ -6,7 +6,7 @@ import { createOfficeDataSource } from './dashboard/createSource.ts'
 import type { OfficeDataSource } from '@pixoffice/protocol/dashboard'
 import type { SceneRuntime } from '@pixoffice/runtime/SceneRuntime'
 import type { OfficeChatSource } from '@pixoffice/protocol/chat'
-import { PreviewChatSource } from './chat/sources.ts'
+import { HttpChatSource, PreviewChatSource } from './chat/sources.ts'
 import { browserChatPersistence } from './chat/persistence.ts'
 import type { ComponentType } from 'react'
 import type { LayoutMode } from '../../shared/scene/layout.tsx'
@@ -117,7 +117,7 @@ export function OfficeTeamWorkspace({ initialTeams, createTeam, chatSource, layo
 
 function DemoApp({ environment, workspaceTools }: { environment: OfficeEnvironment; workspaceTools?: ComponentType<OfficeWorkspaceToolsProps> }) {
   const [dataSource] = useState(() => environment.demo?.createSource() ?? createOfficeDataSource())
-  const [chatSource] = useState(() => environment.demo?.createChatSource() ?? new PreviewChatSource())
+  const [chatSource] = useState(() => environment.demo?.createChatSource() ?? new HttpChatSource('/api/pixoffice/chat'))
   const [directory] = useState(() => dataSource.kind === 'example' ? new DemoOfficeDirectory(dataSource, environment.storage, environment.demo) : undefined)
   const [initialTeams] = useState(() => {
     const teams = directory?.list() ?? []
