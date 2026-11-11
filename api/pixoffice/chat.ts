@@ -315,6 +315,16 @@ function authenticateIp(ip: string): void {
   authenticatedIps.set(ip, Date.now() + AUTH_TTL_MS)
 }
 
+function readPassphrase(): string {
+  // The owner typed the variable name on an iPhone and autocapitalise
+  // turned it into "Chat_passphrase"; match the key case-insensitively
+  // so the gate works regardless of the exact casing used in Vercel.
+  for (const [key, value] of Object.entries(process.env)) {
+    if (key.toLowerCase() === 'chat_passphrase') return (value ?? '').trim()
+  }
+  return ''
+}
+
 /** Normalize browser context for the model: alternate roles, end with the user turn, cap total size. */
 function normalizeMessages(messages: ChatTurn[]): ChatTurn[] {
   const merged: ChatTurn[] = []
@@ -554,7 +564,7 @@ async function handleSend(op: Extract<Operation, { type: 'send' }>, req: Incomin
   if (!checkRateLimit(ip)) {
     throw new HttpError(429, 'RATE_LIMITED', '请求过于频繁，请稍后再试')
   }
-  const passphrase = (process.env.CHAT_PASSPHRASE ?? '').trim()
+  const passphrase = readPassphrase()
   if (passphrase) {
     const content = lastUser.content.trim()
     if (content === passphrase) {
