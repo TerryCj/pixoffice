@@ -30,13 +30,13 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 
 export const runtime = 'nodejs'
-export const maxDuration = 180
+export const maxDuration = 60
 
 const XXTF_BASE = 'https://xxtf.baby'
 const MODEL = 'claude-haiku-5-5'
 const MAX_TOKENS = 800
 const UPSTREAM_TIMEOUT_MS = 120_000
-const STREAM_CAP_MS = 180_000
+const STREAM_CAP_MS = 55_000
 const MAX_REPLY_CHARS = 50_000
 const MAX_REQUEST_BYTES = 524_288
 const MAX_HISTORY_TURNS = 200
