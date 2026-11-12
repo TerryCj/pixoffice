@@ -2,7 +2,7 @@ import { z } from 'zod'
 import type { ScenePack } from '@pixoffice/runtime/scenePack'
 import type { ScenePlugin } from '@pixoffice/runtime/plugins'
 import type { World } from '@pixoffice/runtime/model'
-import { createOfficeWorld } from './definition.ts'
+import { createOfficeWorld, SEAT_FOR } from './definition.ts'
 import { builtinPlugins } from './pack.ts'
 import { supportsOfficePose } from './poseSupport.ts'
 import { whiteboardTaskBoardSchema } from '../whiteboard.ts'
@@ -36,7 +36,7 @@ export function createReferenceOfficeWorld(sceneId = 'office-1'): World {
   world.bounds = { left: 3, top: 4, right: 20, bottom: 17 }
   world.walkableArea = [{ x: 3, y: 4 }, { x: 20, y: 4 }, { x: 20, y: 17 }, { x: 3, y: 17 }]
   world.props.slice(0, 7).forEach((prop, i) => { prop.templateId = 'office.reference-workstation'; prop.position = positions[i] })
-  world.actors.forEach((actor, i) => { actor.position = { x: positions[i].x + 1, y: positions[i].y + 2 } })
+  world.actors.forEach((actor, i) => { const seat = positions[SEAT_FOR[i]]; actor.position = { x: seat.x + 1, y: seat.y + 2 } })
   const board = world.props[7]
   board.templateId = 'office.wall-whiteboard'; board.position = { x: 5, y: 4 }
   board.state = { title: '项目推进', tasks: [] }
