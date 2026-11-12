@@ -1,0 +1,74 @@
+{
+  "events": [
+    {
+      "employeeId": "office-lead",
+      "id": "team-note-1",
+      "kind": "note",
+      "occurredAt": "2026-11-12T10:09:13Z",
+      "summary": "办公室改版进行中：六人团队就位。"
+    },
+    {
+      "employeeId": "office-lead",
+      "id": "team-note-2",
+      "kind": "note",
+      "occurredAt": "2026-11-12T10:34:00Z",
+      "summary": "实时动态验证通过：用户亲眼确认气泡推送。"
+    },
+    {
+      "id": "event-1794480382246",
+      "kind": "note",
+      "employeeId": "office-lead",
+      "summary": "办公室实时接线：进行中——正在把定时任务推送与保活接进办公室",
+      "occurredAt": "2026-11-12T10:46:22.233Z"
+    },
+    {
+      "id": "event-1794480564703",
+      "kind": "note",
+      "employeeId": "office-lead",
+      "summary": "办公室实时接线：已完成——定时任务推送与保活已接通，7 个任务已接线",
+      "occurredAt": "2026-11-12T10:49:24.662Z"
+    }
+  ],
+  "tasks": [
+    {
+      "assigneeId": "office-lead",
+      "id": "premarket-brief",
+      "progress": 0,
+      "status": "queued",
+      "summary": "每日 22:00 推送，暂无进行中内容。",
+      "title": "盘前简报"
+    },
+    {
+      "assigneeId": "code-agent",
+      "id": "panic-report",
+      "progress": 0,
+      "status": "queued",
+      "summary": "A 股/美股恐慌度日报，暂无进行中内容。",
+      "title": "恐慌度日报"
+    },
+    {
+      "assigneeId": "code-agent",
+      "id": "earnings-analysis",
+      "progress": 0,
+      "status": "queued",
+      "summary": "NVDA Q3 财报 11/17，提醒 11/16 08:30。",
+      "title": "财报分析"
+    },
+    {
+      "assigneeId": "review-agent",
+      "id": "launch-watch",
+      "progress": 0,
+      "status": "queued",
+      "summary": "Flight 15 窗口 11/14 06:45–08:00（北京），暂无新进展。",
+      "title": "发射监控"
+    },
+    {
+      "id": "office-realtime-wire",
+      "title": "办公室实时接线",
+      "assigneeId": "office-lead",
+      "status": "completed",
+      "progress": 100,
+      "summary": "定时任务推送与保活已接通，7 个任务已接线"
+    }
+  ]
+}
