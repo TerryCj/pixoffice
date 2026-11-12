@@ -9,7 +9,7 @@ const businessReference = z.string().max(100).optional()
 const actorReference = z.union([idSchema, z.literal('')]).optional()
 const timestamp = z.iso.datetime({ offset: true })
 
-export const maxOfficeMembers = 6
+export const maxOfficeMembers = 7
 export const officeMemberLimitMessage = `办公室已满，最多 ${maxOfficeMembers} 位成员`
 export function officeMemberOccupancy(conversations: readonly { employees: readonly { id: string; sceneActorId?: string }[] }[]) {
   const memberIds = new Set<string>(), actorIds = new Set<string>()
@@ -24,6 +24,20 @@ export const officeMemberInputSchema = z.strictObject({
   name: z.string().trim().min(1).max(80), role: z.string().trim().max(80).default(''), sceneActorId: idSchema,
 })
 export type OfficeMemberInput = z.infer<typeof officeMemberInputSchema>
+
+// 成本面板：财务总监推送的用量与额度数据。所有字段可选，缺失时页面显示“暂无”，不编数字。
+export const financePanelSchema = z.strictObject({
+  updatedAt: timestamp.optional(),
+  relayBalanceUsd: z.number().nonnegative().optional(),
+  relaySpentUsd: z.number().nonnegative().optional(),
+  relayBudgetUsd: z.number().nonnegative().optional(),
+  byModel: z.array(z.strictObject({ model: z.string().min(1).max(80), calls: z.number().int().nonnegative(), costUsd: z.number().nonnegative() })).max(50).optional(),
+  byDay: z.array(z.strictObject({ date: z.string().min(1).max(20), costUsd: z.number().nonnegative() })).max(60).optional(),
+  quotaUsedPercent: z.union([z.literal(-1), z.number().min(0).max(100)]).optional(),
+  quotaResetsAt: z.string().max(100).optional(),
+  alert: z.string().max(300).optional(),
+})
+export type FinancePanelData = z.infer<typeof financePanelSchema>
 
 export const dashboardSnapshotSchema = z.strictObject({
   schemaVersion: z.literal('1.0'),
@@ -52,6 +66,7 @@ export const dashboardSnapshotSchema = z.strictObject({
     networkKbps: z.union([z.literal(-1), z.number().nonnegative()]).optional(),
   }).optional(),
   whiteboard: whiteboardTaskBoardSchema.optional(),
+  finance: financePanelSchema.optional(),
 }).superRefine(validateDashboardSnapshot)
 
 export function validateDashboardSnapshot(snapshot: { employees: { id: string }[]; tasks: { id: string; assigneeId?: string }[] }, context: z.RefinementCtx) {
@@ -65,7 +80,7 @@ export function validateDashboardSnapshot(snapshot: { employees: { id: string }[
 }
 
 export type DashboardSnapshot = z.input<typeof dashboardSnapshotSchema>
-export type DashboardConversation = Pick<DashboardSnapshot, 'employees' | 'tasks' | 'events' | 'whiteboard'> & { id: string; title: string }
+export type DashboardConversation = Pick<DashboardSnapshot, 'employees' | 'tasks' | 'events' | 'whiteboard' | 'finance'> & { id: string; title: string }
 export type DashboardTask = DashboardSnapshot['tasks'][number]
 export type DashboardAction =
   | { type: 'task.start' | 'task.block' | 'task.complete'; taskId: string }

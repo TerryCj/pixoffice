@@ -7,7 +7,7 @@ const root = fileURLToPath(new URL('../../', import.meta.url))
 export const buildCharacter = (directory, options = {}) => buildFrame(directory, { ...options, profile: officeFrameBuildProfile })
 export const buildCharacters = (options = {}) => buildFrames({
   sourceRoot: path.join(root, 'art/characters/packs'), outputRoot: path.join(root, 'public/characters'),
-  requireAdmission: true, ...options, profile: officeFrameBuildProfile,
+  requireAdmission: true, derivedIds: ['finance-agent'], ...options, profile: officeFrameBuildProfile,
 })
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2), options = {}

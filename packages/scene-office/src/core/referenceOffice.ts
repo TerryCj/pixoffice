@@ -30,13 +30,14 @@ export const referenceOfficeObjects: ScenePlugin = {
 
 export function createReferenceOfficeWorld(sceneId = 'office-1'): World {
   const world = createOfficeWorld(sceneId)
-  const positions = [{ x: 5, y: 5 }, { x: 12, y: 11 }, { x: 5, y: 8 }, { x: 12, y: 5 }, { x: 5, y: 11 }, { x: 12, y: 8 }]
+  const positions = [{ x: 5, y: 5 }, { x: 12, y: 11 }, { x: 5, y: 8 }, { x: 12, y: 5 }, { x: 5, y: 11 }, { x: 12, y: 8 }, { x: 15, y: 13 }]
   world.width = 22; world.height = 17
-  world.bounds = { left: 3, top: 4, right: 19, bottom: 17 }
-  world.walkableArea = [{ x: 3, y: 4 }, { x: 19, y: 4 }, { x: 19, y: 17 }, { x: 3, y: 17 }]
-  world.props.slice(0, 6).forEach((prop, i) => { prop.templateId = 'office.reference-workstation'; prop.position = positions[i] })
+  // 右界放宽一格：CFO 桌子在 (15,13)，其右侧入座口 (19,15) 需要在界内，否则导航校验报 SEAT_BLOCKED。
+  world.bounds = { left: 3, top: 4, right: 20, bottom: 17 }
+  world.walkableArea = [{ x: 3, y: 4 }, { x: 20, y: 4 }, { x: 20, y: 17 }, { x: 3, y: 17 }]
+  world.props.slice(0, 7).forEach((prop, i) => { prop.templateId = 'office.reference-workstation'; prop.position = positions[i] })
   world.actors.forEach((actor, i) => { actor.position = { x: positions[i].x + 1, y: positions[i].y + 2 } })
-  const board = world.props[6]
+  const board = world.props[7]
   board.templateId = 'office.wall-whiteboard'; board.position = { x: 5, y: 4 }
   board.state = { title: '项目推进', tasks: [] }
   world.props.push({ id: 'conference-table-1', name: '团队会议桌', templateId: 'office.conference-table', position: { x: 7, y: 14 }, state: {}, stateRevision: 0 })

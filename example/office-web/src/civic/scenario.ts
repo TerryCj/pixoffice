@@ -7,9 +7,9 @@ export type CivicStrategy = 'guidance' | 'appointments' | 'hold'
 
 export const civicCase = { title: '社区便民服务日保障', location: '清和社区服务中心', time: '周六 09:00–12:00' }
 export const civicTeams = {
-  coordination: { id: 'office-1', name: '公务综合协调组', description: '统筹社区便民服务日的需求、人员、通知与服务闭环。', roles: ['综合协调负责人', '诉求受理', '资料核验', '通知联络', '现场保障', '复核归档'] },
-  field: { id: 'office-field', name: '公务现场保障组', description: '核对场地、服务动线与人员安排，跟进现场需求。', roles: ['现场统筹', '秩序引导', '场地检查', '便民指引', '应急联络', '现场复核'] },
-  review: { id: 'office-review', name: '公务材料复核组', description: '统一事项口径，核验服务材料，汇总回访与归档记录。', roles: ['复核负责人', '事项核验', '资料归集', '文书校对', '结果统计', '归档审核'] },
+  coordination: { id: 'office-1', name: '公务综合协调组', description: '统筹社区便民服务日的需求、人员、通知与服务闭环。', roles: ['综合协调负责人', '诉求受理', '资料核验', '通知联络', '现场保障', '复核归档', '经费台账'] },
+  field: { id: 'office-field', name: '公务现场保障组', description: '核对场地、服务动线与人员安排，跟进现场需求。', roles: ['现场统筹', '秩序引导', '场地检查', '便民指引', '应急联络', '现场复核', '物资清点'] },
+  review: { id: 'office-review', name: '公务材料复核组', description: '统一事项口径，核验服务材料，汇总回访与归档记录。', roles: ['复核负责人', '事项核验', '资料归集', '文书校对', '结果统计', '归档审核', '台账复核'] },
 } satisfies Record<CivicTeam, { id: string; name: string; description: string; roles: string[] }>
 
 const preparations: Record<CivicTeam, readonly [string, string][]> = {
@@ -20,6 +20,7 @@ const preparations: Record<CivicTeam, readonly [string, string][]> = {
     ['编写便民服务通知', '统一活动时间、地点、预约方式与材料提示，公开通知须经确认。'],
     ['制定现场保障安排', '核对等候区、咨询台与无障碍通道，准备高峰时段人员安排。'],
     ['复核方案与通知', '核对材料清单、通知与岗位安排，确认后才进入现场服务阶段。'],
+    ['登记服务日费用台账', '记录场地与物料的模拟费用项目，只保留演示编号，不展示真实资金信息。'],
   ],
   field: [
     ['部署现场保障岗位', '逐人确认咨询引导、场地检查、便民指引、联络和复核职责。'],
@@ -28,6 +29,7 @@ const preparations: Record<CivicTeam, readonly [string, string][]> = {
     ['制作便民指引卡', '用简明清单说明时间地点与材料准备，不收集真实身份信息。'],
     ['确认现场联络安排', '整理值守岗位和高峰支援顺序，模拟处置临时服务需求。'],
     ['复核现场保障清单', '核对各岗位就绪情况与现场注意事项，问题未解决不标记完成。'],
+    ['清点现场服务物资', '核对指引卡、座位与标识数量，缺失项记录待补，不影响服务动线。'],
   ],
   review: [
     ['统一事项复核口径', '安排事项核验、资料归集、文书校对、结果统计和归档复核。'],
@@ -36,6 +38,7 @@ const preparations: Record<CivicTeam, readonly [string, string][]> = {
     ['校对便民通知文书', '核对时间地点与措辞，避免把咨询答复写成办理承诺。'],
     ['建立服务统计台账', '分别记录已完成、待补材料和待回访事项，统一统计口径。'],
     ['审核归档与隐私要求', '检查材料最小化、公开范围和归档目录，不展示居民隐私。'],
+    ['复核台账与费用记录', '核对统计台账与费用登记口径，差异项记录待核，不改动原始记录。'],
   ],
 }
 

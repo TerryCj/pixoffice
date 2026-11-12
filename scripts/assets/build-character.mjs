@@ -122,7 +122,7 @@ async function publish(file, buffer, check) {
   await rename(temporary, file)
 }
 
-export async function buildCharacters({ sourceRoot, outputRoot, check = false, maxSize = 2048, requireAdmission = false, atlasFormat = 'webp', profile = frameBuildProfile, ids: selectedIds } = {}) {
+export async function buildCharacters({ sourceRoot, outputRoot, check = false, maxSize = 2048, requireAdmission = false, atlasFormat = 'webp', profile = frameBuildProfile, ids: selectedIds, derivedIds = [] } = {}) {
   if (!sourceRoot || !outputRoot) throw new Error('sourceRoot and outputRoot must be explicit')
   if (selectedIds && (!selectedIds.length || new Set(selectedIds).size !== selectedIds.length)) throw new Error('Select distinct character IDs')
   const directories = (await readdir(sourceRoot, { withFileTypes: true })).filter(entry => entry.isDirectory() && !entry.name.startsWith('.')).sort((a, b) => a.name.localeCompare(b.name, 'en'))
@@ -145,6 +145,17 @@ export async function buildCharacters({ sourceRoot, outputRoot, check = false, m
   if (!characters.length) throw new Error('No character source packs found')
   const registry = CharacterRegistrySchema.parse({ schemaVersion: 1, characters })
   // Content-addressed files first, registry last: failed builds cannot replace a working registry.
-  await publish(path.join(outputRoot, 'registry.json'), json(registry), check)
+  // In check mode, derived packs (built by a later step, not from sources) are stripped from the
+  // on-disk registry before comparison; their own --check verifies them.
+  if (check && derivedIds.length) {
+    const registryPath = path.join(outputRoot, 'registry.json')
+    let current
+    try { current = JSON.parse(await readFile(registryPath, 'utf8')) }
+    catch { throw new Error(`Missing or stale generated resource: ${registryPath}`) }
+    const stripped = { ...current, characters: current.characters.filter(entry => !derivedIds.includes(entry.id)) }
+    if (!json(stripped).equals(json(registry))) throw new Error(`Missing or stale generated resource: ${registryPath}`)
+  } else {
+    await publish(path.join(outputRoot, 'registry.json'), json(registry), check)
+  }
   return registry
 }

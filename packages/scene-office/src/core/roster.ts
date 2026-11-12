@@ -6,7 +6,7 @@ export type AgentRosterEntry = {
   room: string
 }
 
-/** 6 位 AI 团队成员（名册序号 1–6） */
+/** 7 位 AI 团队成员（名册序号 1–7） */
 export const OFFICE_ROSTER: AgentRosterEntry[] = [
   {
     id: 'office-lead',
@@ -49,5 +49,12 @@ export const OFFICE_ROSTER: AgentRosterEntry[] = [
     color: 0x4ecdc4,
     task: '开发：待命',
     room: '算斋',
+  },
+  {
+    id: 'finance-agent',
+    name: 'CFO',
+    color: 0x2e9e5b,
+    task: '财务：待命',
+    room: '数堂',
   },
 ]

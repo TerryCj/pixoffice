@@ -23,7 +23,7 @@ export class PushOfficeDataSource implements OfficeDataSource {
     const snapshot = this.readSnapshot(), conversation = snapshot.conversations.find(item => item.id === this.conversationId)
     return { schemaVersion: snapshot.schemaVersion, seq: snapshot.seq, workspace: snapshot.workspace, system: snapshot.system,
       ...(this.conversationId ? { conversationId: this.conversationId } : {}),
-      employees: conversation?.employees ?? [], tasks: conversation?.tasks ?? [], events: conversation?.events ?? [], whiteboard: conversation?.whiteboard ?? emptyWhiteboard() }
+      employees: conversation?.employees ?? [], tasks: conversation?.tasks ?? [], events: conversation?.events ?? [], whiteboard: conversation?.whiteboard ?? emptyWhiteboard(), finance: conversation?.finance }
   }
   subscribe = (listener: () => void) => { this.listeners.add(listener); return () => { this.listeners.delete(listener) } }
   update(snapshot: OfficeSnapshot, recovery = false) {

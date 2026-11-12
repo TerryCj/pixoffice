@@ -12,6 +12,8 @@ const initialEmployees: DashboardSnapshot['employees'] = [
   { id: 'app-agent', sceneActorId: 'app-agent', name: 'Gemini', role: '副分析师 · 参斋', online: true },
   { id: 'review-agent', sceneActorId: 'review-agent', name: 'Grok', role: '实时情报员 · 望阁', online: true },
   { id: 'data-agent', sceneActorId: 'data-agent', name: 'Codex', role: '程序员 · 算斋', online: true },
+  // 财务总监没有 3D 场景人物，sceneActorId 留空（非空且不存在的人物 ID 会导致快照被拒）。
+  { id: 'finance-agent', sceneActorId: 'finance-agent', name: 'CFO', role: '财务总监 · 数堂', online: true },
 ]
 
 export type ExampleOfficeSeed = {

@@ -5,6 +5,7 @@ import type { DashboardTask } from '@pixoffice/protocol/dashboard'
 import { maxOfficeMembers, officeMemberLimitMessage } from '@pixoffice/protocol/dashboard'
 import type { ScenePanel } from '../components/SceneControlPanel.tsx'
 import { CharacterAvatar } from '../components/CharacterArtwork.tsx'
+import { FinancePanel } from '../components/FinancePanel.tsx'
 import { memberOverview, memberProgress, memberTaskStatuses, memberTime } from '../dashboard/memberSelectors.ts'
 import { officeOverview } from '../dashboard/officeOverview.ts'
 import type { OfficeShellProps } from './OfficeShell.tsx'
@@ -118,6 +119,7 @@ export function MemberOfficeWorkspace({ dashboard, appearanceIds, scene, sceneAs
           <div ref={detailScroll} className="member-detail-scroll" role="region" aria-label="当前任务与最近动态" tabIndex={0}>
           <section className="member-current-task"><h3>当前任务</h3>{overview.currentTask ? <><div><strong>{overview.currentTask.title}</strong><span className={`member-task-status status-${overview.currentTask.status}`}>{memberTaskStatuses[overview.currentTask.status]}</span></div>{overview.currentTask.summary && <p className="member-task-summary">{overview.currentTask.summary}</p>}<TaskProgress task={overview.currentTask} /></> : <p className="member-empty">当前没有关联任务</p>}</section>
           <section className="member-recent-events"><h3>最近动态</h3><ol>{overview.events.slice(0, 3).map(event => <li key={event.id}><i /><span>{event.summary}</span><time dateTime={event.occurredAt}>{memberTime(event.occurredAt)}</time></li>)}</ol>{!overview.events.length && <p className="member-empty">暂无动态</p>}</section>
+          <FinancePanel finance={dashboard?.finance} />
           </div>
           <footer className="member-detail-footer"><button type="button" className="member-profile-open" onClick={() => { if (onInspectEmployee) onInspectEmployee(employee.id); else setPanel('profile') }}><UserRound size={16} />查看完整档案<ArrowRight size={16} /></button></footer>
         </> : <p className="member-empty">{hasOffice ? '选择一位成员查看资料' : '暂无办公室'}</p>}

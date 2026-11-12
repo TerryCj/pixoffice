@@ -12,6 +12,6 @@ export interface DemoOfficeScenario {
 
 export function createDemoOfficeTeams(source: OfficeDataSource): DemoOfficeTeam[] {
   return [
-    { id: 'office-1', name: 'BOSS', description: 'Muse 总管与五位 AI 成员的日常工作。', sceneLabel: '办公室', source },
+    { id: 'office-1', name: 'BOSS', description: 'Muse 总管与六位 AI 成员的日常工作。', sceneLabel: '办公室', source },
   ]
 }

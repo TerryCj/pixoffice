@@ -64,7 +64,7 @@ test('civic directory, all conversations, people, charts and initial histories c
     assert.equal(team.source.replayEvents, false)
     assert.equal(team.source.canExecute, false)
     const data = await team.source.getSnapshot()
-    assert.equal(data.employees.length, 6)
+    assert.equal(data.employees.length, 7)
     assert(data.tasks.every(task => task.status === 'queued' && task.progress === 0))
     assert(data.employees.every(employee => memberOverview(data, employee.id).events.some(event => /待命/.test(event.summary))))
     const chat = civicChatSource(team.source)

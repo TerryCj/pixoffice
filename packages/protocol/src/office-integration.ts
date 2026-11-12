@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { idSchema, jsonObjectSchema, responseEnvelopeSchema } from './schema.ts'
-import { dashboardSnapshotSchema, validateDashboardSnapshot } from './dashboard.ts'
+import { dashboardSnapshotSchema, financePanelSchema, validateDashboardSnapshot } from './dashboard.ts'
 import { whiteboardTaskBoardSchema, officeUiManifest, emptyWhiteboard } from './office-ui.ts'
 import { officeChatConfigSchema, chatProtocolSchema, describeChatProtocol } from './chat.ts'
 import { relayPaths, relayMessageSchema, maxRelayMessageBytes } from './relay.ts'
@@ -24,6 +24,7 @@ export const officeConversationSchema = z.strictObject({ id: idSchema, title: te
     taskId: eventSchema.shape.taskId.default(''), employeeId: eventSchema.shape.employeeId.default(''), fromEmployeeId: eventSchema.shape.fromEmployeeId.default(''),
   })).max(500).default([]),
   whiteboard: whiteboardTaskBoardSchema.default(emptyWhiteboard),
+  finance: financePanelSchema.optional(),
 }).superRefine(validateDashboardSnapshot)
 export type OfficeConversation = z.infer<typeof officeConversationSchema>
 export const officeSnapshotSchema = z.strictObject({ schemaVersion: z.literal('1.0'), seq: seqSchema,

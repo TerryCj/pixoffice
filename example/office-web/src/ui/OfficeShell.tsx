@@ -4,6 +4,7 @@ import { Blocks, Braces, Download, FileJson, Globe, House, ListTodo, Plug, Slide
 import type { DashboardAction, DashboardSnapshot, DashboardTask, OfficeDataSource, OfficeMemberInput } from '@pixoffice/protocol/dashboard'
 import { dashboardMetrics } from '../dashboard/selectors.ts'
 import { CharacterAvatar } from '../components/CharacterArtwork.tsx'
+import { FinancePanel } from '../components/FinancePanel.tsx'
 import { SponsorCredit } from '../components/SponsorCredit.tsx'
 import type { ScenePanel } from '../components/SceneControlPanel.tsx'
 import '../components/RuntimeWorkspace.css'
@@ -118,6 +119,7 @@ export function OfficeShell({ connection, dashboard, dashboardError, sceneLinkEr
         <div className="runtime-panel-heading runtime-events-heading"><h2>实时动态</h2></div>
         <ol className="runtime-event-list">{(dashboard?.events ?? []).slice(0, 12).map(event => <li key={event.id}><span className="runtime-event-dot" /><div><p><strong>{employees.find(employee => employee.id === event.employeeId)?.name ?? '系统'}</strong> {event.summary}</p><time dateTime={event.occurredAt}>{formatTime(event.occurredAt)}</time></div></li>)}</ol>
         {dashboard && !dashboard.events.length && <p className="runtime-empty">暂无动态</p>}
+        <FinancePanel finance={dashboard?.finance} />
         <div className="runtime-panel-heading runtime-tools-heading"><h2>快捷工具</h2></div>
         <div className="runtime-quick-tools"><button disabled={!hasOffice} onClick={() => exportCapabilities()}><FileJson size={19} />场景协议</button><button disabled={!hasOffice} onClick={() => exportSnapshot()}><Download size={19} />导出快照</button></div>
       </div> : section === 'employees' ? <div className="runtime-inspector-scroll"><div className="runtime-panel-heading"><h2>团队成员</h2><span>{employees.length}</span></div><div className="runtime-employee-list">{employees.map(employee => {

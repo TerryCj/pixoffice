@@ -180,9 +180,9 @@ test('clip sampling supports variable timing, loop boundaries and explicit alias
   for (const value of [NaN, Infinity, -1]) assert.equal(sampleCharacterClip(manifest, 'walk.front', value).index, 0)
 })
 
-test('all six migrated packs validate, have office actions, separate run/walk and use one fixed scale', async () => {
+test('all seven migrated packs validate, have office actions, separate run/walk and use one fixed scale', async () => {
   const registry = JSON.parse(await readFile(new URL('../public/characters/registry.json', import.meta.url), 'utf8'))
-  assert.equal(registry.characters.length, 6)
+  assert.equal(registry.characters.length, 7)
   for (const entry of registry.characters) {
     const pack = await characterPackFixture(entry.id)
     CharacterManifestSchema.parse(pack.manifest)

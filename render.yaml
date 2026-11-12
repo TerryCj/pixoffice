@@ -1,0 +1,47 @@
+# PixOffice relay — Render free-tier trial
+#
+# Purpose: host the relay server (Fastify, serves the office frontend + SSE live
+# state on the SAME origin) so the public office shows real member/task status
+# instead of static demo data. The user approved trying a free host first
+# (2026-11-12); the goal is to verify the real-time update loop.
+#
+# Why Render free, and its limits (verified 2026-11-12):
+# - No card required; 750 free instance-hours/month (one service 24/7 uses ~720).
+# - Sleeps after 15 min with no inbound traffic; first visit after sleep waits
+#   ~1 min for wake. NOT truly always-on (Starter $7/mo never sleeps).
+# - Ephemeral filesystem + in-memory state: when it sleeps/restarts, the office
+#   snapshot is lost. Re-push after wake:
+#     PIXOFFICE_URL=https://<app>.onrender.com PIXOFFICE_API_KEY=<key> \
+#       node relay/send-team-status.mjs init
+#
+# Why the whole app is served from here, not just the relay:
+# - The relay rejects cross-site browser connections (sameOrigin check on the
+#   SSE endpoint, incl. Sec-Fetch-Site). Pointing the Vercel frontend at a
+#   Render relay URL would get 403 on the live stream. Same-origin serving
+#   avoids this: the server's /pixoffice-config.js returns relayUrl "/".
+# - Office chat on this copy will report "not configured" until its upstream is
+#   wired; chat stays on the Vercel site for now.
+#
+# Deploy steps (delivery): Render dashboard -> New Web Service -> connect
+# GitHub repo workbzw/pixoffice (push latest changes first — the working tree
+# may be ahead of the pushed commit) -> use this render.yaml (Blueprint) or
+# enter the values below manually. Set PIXOFFICE_API_KEY to a fresh random
+# value in the dashboard (never the demo key pixoffice-demo-key).
+# Then: curl https://<app>.onrender.com/health -> push init -> open
+# https://<app>.onrender.com/office/ -> change team-status.json, run snapshot,
+# watch the page update within seconds. That is the verification.
+services:
+  - type: web
+    name: pixoffice-relay
+    env: node
+    plan: free
+    buildCommand: npm ci && npm run build:full
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: HOST
+        value: 0.0.0.0
+      - key: PIXOFFICE_API_KEY
+        sync: false

@@ -132,6 +132,17 @@
 .runtime-active-activity strong { font-size: 11px; }
 .runtime-active-activity small { color: #98a198; font-size: 10px; }
 .runtime-active-activity button { display: grid; place-items: center; width: 25px; height: 25px; border: 0; background: #eef1ee; border-radius: 5px; }
+.runtime-finance-heading { margin-top: 16px; }
+.runtime-finance { display: grid; gap: 6px; margin-bottom: 4px; }
+.runtime-finance-row { display: flex; justify-content: space-between; gap: 8px; color: #69716a; font-size: 11px; }
+.runtime-finance-row strong { color: #313a33; font-weight: 600; text-align: right; }
+.runtime-finance-sub { margin-top: 4px; color: #858e86; font-size: 11px; font-weight: 650; }
+.runtime-finance .runtime-empty { margin: 0; }
+.runtime-finance-alert { margin: 4px 0 0; padding: 7px 8px; border: 1px solid #ead4cf; border-radius: 7px; background: #fdf6f4; color: #a35d52; font-size: 11px; }
+.runtime-finance-updated { margin: 2px 0 0; color: #a3aba4; font-size: 10px; }
+.runtime-meter i.quota-ok { background: #4caf7d; }
+.runtime-meter i.quota-warn { background: #e0a83c; }
+.runtime-meter i.quota-high { background: #d96a5a; }
 @media (max-width: 1130px) { .runtime-workspace { grid-template-columns: 184px minmax(0, 1fr) 260px; } .runtime-sidebar { padding: 14px 9px; } .runtime-center { padding: 10px; gap: 10px; } .runtime-stats { gap: 6px; } .runtime-stat { padding: 10px; } }
 @media (max-width: 930px) { .runtime-workspace { grid-template-columns: 180px minmax(0, 1fr); grid-template-rows: minmax(480px, 67dvh) auto; height: 100dvh; overflow: auto; } .runtime-sidebar { grid-row: 1 / 3; } .runtime-inspector { grid-column: 2; min-height: 320px; max-height: 510px; border-top: 1px solid #e2e5e2; } .runtime-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } .runtime-system { display: none; } }
 @media (max-width: 620px) { .runtime-workspace { display: flex; flex-direction: column; overflow-y: auto; } .runtime-sidebar { order: 1; flex: 0 0 auto; overflow: visible; padding: 10px; gap: 9px; } .runtime-brand-identity, .runtime-sidebar-middle, .runtime-footer { display: none; } .runtime-nav { flex-direction: row; overflow-x: auto; } .runtime-nav :is(button, a) { flex: 0 0 auto; width: auto; min-height: 33px; padding: 0 9px; } .runtime-nav button small { display: none; } .runtime-center { order: 2; flex: 0 0 auto; height: 70dvh; min-height: 430px; padding: 8px; gap: 8px; } .runtime-stat { min-height: 75px; padding: 7px; } .runtime-stat > strong { font-size: 20px; } .runtime-stat > small { font-size: 9px; } .runtime-inspector { order: 3; flex: 0 0 auto; min-height: 310px; max-height: none; border-left: 0; } .runtime-stats { gap: 5px; } }
