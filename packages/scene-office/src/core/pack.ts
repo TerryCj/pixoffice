@@ -60,6 +60,7 @@ export const officeVisits: ScenePlugin = {
 }
 
 const meetingParams = z.strictObject({ boardId: idSchema, text: z.string().max(500), durationMs: z.number().int().min(1000).max(120000).default(8000) })
+const tableMeetingParams = z.strictObject({ tableId: idSchema, text: z.string().max(500), durationMs: z.number().int().min(1000).max(120000).default(8000) })
 export const officeMeetings: ScenePlugin = {
   id: 'office.meetings', name: '多人会议', version: '1.0.0', apiVersion: 1, dependencies: ['office.objects'],
   capabilities: [{ id: 'office.meeting', name: '白板会议', params: meetingParams,
@@ -76,7 +77,21 @@ export const officeMeetings: ScenePlugin = {
         { title: '讨论', durationMs: params.durationMs, poses: list.map(a => ({ actorId: a.id, posture: 'standing', facing: 'back' })), speech: [{ actorId: speaker.id, text: params.text }] },
         ...[...list].reverse().flatMap(a => returnHome([a])),
       ] }
-    } }],
+    } },
+    { id: 'office.tableMeeting', name: '会议桌讨论', params: tableMeetingParams,
+      participants: { min: 2, max: 6, roles: [{ role: 'speaker', min: 1, max: 1 }, { role: 'attendee', min: 1, max: 5 }], rules: ['参与者必须绑定座位；tableId 必须指向会议桌'] },
+      build(context, raw) {
+        const params = tableMeetingParams.parse(raw), list = actors(context)
+        if (list.length < 2 || list.length > 6 || context.participants.filter(p => p.role === 'speaker').length !== 1 || context.participants.some(p => p.role !== 'speaker' && p.role !== 'attendee')) throw new SceneFault('INVALID_PARTICIPANTS', '会议桌讨论需 2–6 人、一位 speaker，其余为 attendee')
+        const table = context.world.props.find(p => p.id === params.tableId && p.templateId === 'office.conference-table')
+        if (!table) throw new SceneFault('ENTITY_NOT_FOUND', params.tableId)
+        const speaker = one(context, 'speaker')
+        return { title: '会议桌讨论', claims: [...bodies(list), ...speeches(list), claim(`prop:${table.id}:meeting`)], phases: [
+          ...list.map((a, i) => ({ title: `${a.name}到场`, moves: [{ actorId: a.id, targetId: table.id, anchor: `attendee${i + 1}` }] })),
+          { title: '讨论', durationMs: params.durationMs, poses: list.map((a, i) => ({ actorId: a.id, posture: 'standing', facing: i < 3 ? 'front' : 'right' })), speech: [{ actorId: speaker.id, text: params.text }] },
+          ...[...list].reverse().flatMap(a => returnHome([a])),
+        ] }
+      } }],
 }
 
 const focusParams = z.strictObject({ title: z.string().min(1).max(100) })

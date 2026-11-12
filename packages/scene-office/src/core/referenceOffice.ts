@@ -22,7 +22,10 @@ export const referenceOfficeObjects: ScenePlugin = {
     { id: 'office.wall-whiteboard', name: '后墙协作白板', view: 'wall-whiteboard', footprint: { left: 0, top: 0, right: 12, bottom: 1 }, initialState: { title: '', tasks: [] },
       interactions: { write: { name: '查看白板', anchor: 'attendee1', approaches: ['attendee1'], cells: [], posture: 'standing', facing: 'back', resource: 'meeting' } },
       anchors: { attendee1: { x: 5, y: 1 }, attendee2: { x: 6, y: 1 }, attendee3: { x: 5, y: 2 }, attendee4: { x: 6, y: 2 }, attendee5: { x: 7, y: 1 }, attendee6: { x: 8, y: 1 } }, resources: { meeting: 1 } },
-    { id: 'office.conference-table', name: '会议桌椅', view: 'conference-table', footprint: { left: 0, top: 0, right: 8, bottom: 3 }, anchors: {}, resources: {} },
+    { id: 'office.conference-table', name: '会议桌椅', view: 'conference-table', footprint: { left: 0, top: 0, right: 8, bottom: 3 },
+      // 会议桌讨论站位：前 3 个在桌子上方（北侧），后 3 个在桌子左侧（西侧）。相对桌子位置 (7,14)。
+      anchors: { attendee1: { x: 2, y: -1 }, attendee2: { x: 3, y: -1 }, attendee3: { x: 4, y: -1 }, attendee4: { x: -1, y: 0 }, attendee5: { x: -1, y: 1 }, attendee6: { x: -1, y: 2 } },
+      resources: { meeting: 1 } },
   ],
   stateSchemas: { 'office.wall-whiteboard': z.strictObject({ title: z.string().max(80).default(''),
     taskBoard: whiteboardTaskBoardSchema.optional(), tasks: z.array(task).max(12).optional() }) },
