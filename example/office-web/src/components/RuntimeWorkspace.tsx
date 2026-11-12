@@ -9,7 +9,6 @@ import type { ChatWorkspace } from '../chat/ChatWorkspace.ts'
 import type { DecisionSession } from '../application/decisions/DecisionSession.ts'
 import type { OfficeSimulation } from '../application/OfficeSimulation.ts'
 import { OfficeCanvas } from './OfficeCanvas.tsx'
-import { OfficeChat } from './OfficeChat.tsx'
 import { SceneControlPanel } from './SceneControlPanel.tsx'
 import { initialMapView } from './map-editor/commands.ts'
 import { useOfficeSceneController } from '../controller/useOfficeSceneController.ts'
@@ -41,7 +40,7 @@ function download(value: unknown, filename: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-export function RuntimeWorkspace({ runtime, simulation, whiteboardProgress, connection, dashboard, dashboardError, sceneLinkError, dataMode, canExecuteActions = true, executeAction, createEmployee, memberCreation, pendingTaskIds, actionError, chatSession, decisionSession, uiSession, decisionOpenToken = 0, teamSelection, layout = 'full', pageLayout, shell: suppliedShell, presentation, workspaceTools: WorkspaceTools, previewSessions, layoutStorageKey }: {
+export function RuntimeWorkspace({ runtime, simulation, whiteboardProgress, connection, dashboard, dashboardError, sceneLinkError, dataMode, canExecuteActions = true, executeAction, createEmployee, memberCreation, pendingTaskIds, actionError, uiSession, teamSelection, layout = 'full', pageLayout, shell: suppliedShell, presentation, workspaceTools: WorkspaceTools, previewSessions, layoutStorageKey }: {
   presentation?: OfficePresentation
   simulation?: OfficeSimulation
   whiteboardProgress?: WhiteboardProgress
@@ -72,7 +71,6 @@ export function RuntimeWorkspace({ runtime, simulation, whiteboardProgress, conn
   const revision = useSyncExternalStore(runtime.subscribe, runtime.getRevision)
   const snapshot = useMemo(() => { void revision; return runtime.snapshot() }, [runtime, revision])
   const [mapView, setMapView] = useState(initialMapView)
-  const [chatExpanded, setChatExpanded] = useState(false)
   const [teamPickerOpen, setTeamPickerOpen] = useState(false)
   const [workspaceToolsOpen, setWorkspaceToolsOpen] = useState(false)
   const [officeSwitcherTarget, setOfficeSwitcherTarget] = useState<HTMLDivElement | null>(null)
@@ -95,11 +93,9 @@ export function RuntimeWorkspace({ runtime, simulation, whiteboardProgress, conn
     if (pageLayout) pageLayout.onChange(kind)
     else { setShellKind(kind); saveOfficeShell(kind, layoutStorageKey) }
   }
-  useEffect(() => { setChatExpanded(false) }, [runtime, decisionOpenToken])
-  const covered = layout === 'full' && chatExpanded && !snapshot.editor
   const inspectActor = useCallback((actorId: string) => { void uiSession?.request({ action: 'actor.inspect', actorId }).catch(() => {}) }, [uiSession])
   const inspectEmployee = useCallback((employeeId: string) => { void uiSession?.request({ action: 'employee.inspect', employeeId }).catch(() => {}) }, [uiSession])
-  const controller = useOfficeSceneController(runtime, covered || teamPickerOpen || workspaceToolsOpen, simulation, dashboard, uiSession?.enabled ? inspectActor : undefined, whiteboardProgress, uiSession?.enabled ? inspectEmployee : undefined, selectActor, !memberLayout, presentation)
+  const controller = useOfficeSceneController(runtime, teamPickerOpen || workspaceToolsOpen, simulation, dashboard, uiSession?.enabled ? inspectActor : undefined, whiteboardProgress, uiSession?.enabled ? inspectEmployee : undefined, selectActor, !memberLayout, presentation)
   useEffect(() => {
     controller.sceneRef.current?.selectActor(memberLayout ? selectedEmployee?.sceneActorId : undefined)
   }, [memberLayout, selectedEmployee?.sceneActorId, controller.loaded, controller.sceneRef, runtime])
@@ -111,7 +107,6 @@ export function RuntimeWorkspace({ runtime, simulation, whiteboardProgress, conn
   </OfficeCanvas>
   if (layout === 'scene') return <SceneOnlyLayout>{canvas}{uiSession && <OfficeUiPanel session={uiSession} />}</SceneOnlyLayout>
   const appearanceIds = Object.fromEntries(snapshot.world.actors.map(actor => [actor.id, actor.templateId]))
-  const leader = snapshot.world.actors.find(actor => actor.id === employees[0]?.sceneActorId) ?? snapshot.world.actors[0]
   return <><Shell key={runtime.sceneId} connection={connection} dashboard={dashboard} dashboardError={dashboardError} sceneLinkError={sceneLinkError}
     pendingTaskIds={pendingTaskIds} actionError={actionError} appearanceIds={appearanceIds}
     dataMode={dataMode} canExecuteActions={canExecuteActions} executeAction={executeAction} editing={!!snapshot.editor} persistenceError={snapshot.persistenceError}
@@ -126,14 +121,8 @@ export function RuntimeWorkspace({ runtime, simulation, whiteboardProgress, conn
     exportSnapshot={() => download(runtime.snapshot(), 'scene-snapshot.json')}
     renderScenePanel={panel => <SceneControlPanel key={runtime.sceneId} runtime={runtime} snapshot={snapshot} panel={panel} />}
     scene={<main className={`office-main${snapshot.world.props.some(prop => prop.templateId === 'office.wall-whiteboard') && !snapshot.editor ? ' office-main-reference' : ''}${presentation === 'panorama' && !snapshot.editor ? ' office-main-panorama' : ''}`} aria-label="PixOffice 场景">
-      <div className="office-stage" inert={covered}>{canvas}</div>
+      <div className="office-stage">{canvas}</div>
       {uiSession && <OfficeUiPanel session={uiSession} />}
-      <OfficeChat key={runtime.sceneId} session={chatSession} expanded={covered} onExpandedChange={setChatExpanded} hidden={!!snapshot.editor}
-        decisionSession={decisionSession} decisionOpenToken={decisionOpenToken}
-        decisionPreview={dataMode === 'example' && chatSession.source.kind === 'preview'}
-        onReplayDemo={dataMode === 'example' && simulation ? () => { simulation.setDemo(false); simulation.setDemo(true) } : undefined}
-        leaderAppearanceId={leader?.templateId}
-        leaderName={employees[0]?.name ?? leader?.name ?? '办公室负责人'} />
     </main>} />
     {WorkspaceTools && !snapshot.editor && <WorkspaceTools previewSessions={previewSessions} layoutId={selectedLayout} teamSelection={teamSelection} sceneReady={controller.loaded} onOpenChange={setWorkspaceToolsOpen} />}
   </>
