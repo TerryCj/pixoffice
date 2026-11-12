@@ -88,7 +88,7 @@ export const officeMeetings: ScenePlugin = {
         const speaker = one(context, 'speaker')
         return { title: '会议桌讨论', claims: [...bodies(list), ...speeches(list), claim(`prop:${table.id}:meeting`)], phases: [
           ...list.map((a, i) => ({ title: `${a.name}到场`, moves: [{ actorId: a.id, targetId: table.id, anchor: `attendee${i + 1}` }] })),
-          { title: '讨论', durationMs: params.durationMs, poses: list.map((a, i) => ({ actorId: a.id, posture: 'standing', facing: i < 3 ? 'front' : 'right' })), speech: [{ actorId: speaker.id, text: params.text }] },
+          { title: '讨论', durationMs: params.durationMs, poses: list.map(a => ({ actorId: a.id, posture: 'standing', facing: 'front' })), speech: [{ actorId: speaker.id, text: params.text }] },
           ...[...list].reverse().flatMap(a => returnHome([a])),
         ] }
       } }],
