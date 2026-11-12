@@ -51,7 +51,7 @@ const UNLOCK_REPLY = '认出你了，开始吧'
 const DENIAL_REPLY = '这个办公室只回主人的消息，请先发口令。'
 
 const SYSTEM_PROMPT =
-  '你是 AI 团队办公室的办公室助手。你所在的团队有 6 位 AI 成员：' +
+  '你是 BOSS 的办公室助手。你所在的团队有 6 位 AI 成员：' +
   'Muse（总管）、Claude（首席分析师）、ChatGPT（情报官）、' +
   'Gemini（副分析师）、Grok（实时情报员）、Codex（程序员）。' +
   '团队当前有 4 项任务，全部待开始：盘前简报（Muse 负责）、' +

@@ -40,7 +40,7 @@ export class ExampleOfficeDataSource implements OfficeDataSource {
     this.insightAt = now; this.insightDomain = seed.insightDomain
     const at = now.toISOString()
     this.snapshot = parseDashboardSnapshot({
-      schemaVersion: '1.0', workspace: { id: 'office-1', name: 'AI 团队办公室' },
+      schemaVersion: '1.0', workspace: { id: 'office-1', name: 'BOSS' },
       employees: initialEmployees,
       tasks: [
         { id: 'premarket-brief', title: '盘前简报', assigneeId: 'office-lead', status: 'queued', progress: 0, updatedAt: at, summary: '每日 22:00 推送，暂无进行中内容。' },
